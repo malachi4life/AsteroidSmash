@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Asteroid
   - WildAsteroid
+  - Planet
   layers:
   - Default
   - TransparentFX

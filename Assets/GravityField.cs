@@ -5,12 +5,14 @@ public class GravityField : MonoBehaviour
     [SerializeField] private float gravityStrength = 15f; // Adjustable in Inspector
 
     void OnTriggerEnter2D(Collider2D other)
+{
+    if (other.CompareTag("Asteroid")) // Only affect player asteroid
     {
-        if (other.CompareTag("Asteroid")) // Only affect player asteroid
-        {
-            Debug.Log(other.name + " entered gravity field of: " + transform.parent.name);
-        }
+        string parentName = transform.parent != null ? transform.parent.name : "Unknown Parent";
+        Debug.Log(other.name + " entered gravity field of: " + parentName);
     }
+}
+
 
     void OnTriggerStay2D(Collider2D other)
     {

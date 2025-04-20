@@ -11,11 +11,13 @@ public class PlanetSpawner : MonoBehaviour
     public float orbitVariation = 5f; // Random offset for more natural spacing
 
     private List<Vector2> planetPositions = new List<Vector2>();
+    
 
     void Start()
     {
         SpawnPlanets();
     }
+    
 
     void SpawnPlanets()
     {

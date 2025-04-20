@@ -2,27 +2,35 @@ using UnityEngine;
 
 public class PlanetFinder : MonoBehaviour
 {
-    public Transform player; // Assign the player in the Inspector
+    public Transform pointer; // Assign the arrow/pointer in the Inspector (child of asteroid)
     private Transform nearestPlanet;
 
-    void Update()
+    void FixedUpdate()
     {
-        FindNearestPlanet();  // Find the nearest planet each frame
+        if (pointer == null)
+        {
+            Debug.LogWarning("Pointer reference not set in PlanetFinder!");
+            return;
+        }
+
+        FindNearestPlanet();
 
         if (nearestPlanet != null)
         {
-            Vector2 direction = (nearestPlanet.position - player.position).normalized;
+            Vector2 direction = (nearestPlanet.position - transform.position).normalized;
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(0, 0, angle);  // Rotate arrow to face the planet
+
+            // Adjust angle depending on how your pointer sprite is oriented
+            pointer.rotation = Quaternion.Euler(0, 0, angle - 90f);
+
+            Debug.DrawLine(transform.position, nearestPlanet.position, Color.green);
         }
     }
 
     void FindNearestPlanet()
     {
-        // Find all GameObjects with the "Planet" tag (which we will assign when we instantiate them)
         GameObject[] planets = GameObject.FindGameObjectsWithTag("Planet");
 
-        // If no planets are found, skip the rotation
         if (planets.Length == 0)
         {
             nearestPlanet = null;
@@ -34,18 +42,14 @@ public class PlanetFinder : MonoBehaviour
 
         foreach (GameObject planet in planets)
         {
-            // Find the distance to the player
-            float distance = Vector2.Distance(player.position, planet.transform.position);
+            float distance = Vector2.Distance(transform.position, planet.transform.position);
             if (distance < closestDistance)
             {
                 closestDistance = distance;
-                closestPlanet = planet.transform;  // Set the closest planet
+                closestPlanet = planet.transform;
             }
         }
 
-        if (closestPlanet != null)
-        {
-            nearestPlanet = closestPlanet;  // Assign the closest planet
-        }
+        nearestPlanet = closestPlanet;
     }
 }
